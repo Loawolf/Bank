@@ -1,4 +1,2 @@
-www
-www
-мася
-1234
+admin
+admin

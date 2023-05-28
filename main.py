@@ -131,7 +131,11 @@ class instrac():
 
     def rasch():
         def calculate_credit():
-            if type(principal_entry.get()) or type(interest_rate_entry.get()) or type(time_period_entry.get()) == '':
+            try:
+                float(principal_entry.get())
+                float(interest_rate_entry.get())
+                float(time_period_entry.get())
+            except:
                 messagebox.showerror(
                     'Ошибка ввода', "Введите во все поля данные!\nИ указывайте их корректно!")
                 window.destroy()
@@ -151,7 +155,11 @@ class instrac():
             )
 
         def calculate_deposit():
-            if type(principal_entry.get()) or type(interest_rate_entry.get()) or type(time_period_entry.get()) == '':
+            try:
+                float(principal_entry.get())
+                float(interest_rate_entry.get())
+                float(time_period_entry.get())
+            except:
                 messagebox.showerror(
                     'Ошибка ввода', "Введите во все поля данные!\nИ указывайте их корректно!")
                 window.destroy()
@@ -179,6 +187,15 @@ class instrac():
                     "Ошибка", 'Сначала нужно выбрать тип расчета!')
 
         def generate_payment_schedule():
+            try:
+                float(principal_entry.get())
+                float(interest_rate_entry.get())
+                float(time_period_entry.get())
+            except:
+                messagebox.showerror(
+                    'Ошибка ввода', "Введите во все поля данные!\nИ указывайте их корректно!")
+                window.destroy()
+
             principal = int(principal_entry.get())
             interest_rate = float(interest_rate_entry.get())
             years = int(time_period_entry.get())
@@ -356,7 +373,7 @@ Button(text='Вход в систему', width=15, height=5, font='Arial 11',
 instr = Button(text='Инструкция\n пользователя', command=instrac.inst, width=15, height=5, state='disabled', font='Arial 11',
                bg='#D90D43', foreground='#F2F2F2')
 instr.grid(row=1, column=1)
-Button(text='Online-\nРегистрация', command=reg, width=15, height=5, font='Arial 11',
+Button(text='Регистрация', command=reg, width=15, height=5, font='Arial 11',
        bg='#D90D43', foreground='#F2F2F2').grid(row=1, column=2)
 Button(text='Часто задаваемые\n вопросы', command=vopr, width=15, height=5, font='Arial 11',
        bg='#D90D43', foreground='#F2F2F2').grid(row=1, column=3)
