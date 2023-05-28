@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import matplotlib.pyplot as plt
 from PIL import Image, ImageTk
+import requests
 
 root = Tk()
 root.config(background='#F2F2F2')
@@ -50,7 +51,7 @@ class instrac():
         Label(dep, text='Условия:\n Ставка до 10,5% \n Сумма до 3 млн. ₽ \n Доход 158 219 ₽').grid(
             row=1, column=1)
         Button(dep, text='Оформить\n заявку', bg='#D9042B', font='Arial 10 bold', width=10,
-               foreground='white').grid(row=1, column=2)
+               foreground='white', command=url1).grid(row=1, column=2)
     # Отступы
         Label().grid(row=2, column=0)
         Label().grid(row=2, column=1)
@@ -65,7 +66,7 @@ class instrac():
         Label(dep, text='Условия:\n Ставка до 10% \n Сумма до 1 млн 500 тыс. ₽ \n Доход 150 685 ₽').grid(
             row=4, column=1)
         Button(dep, text='Оформить\n заявку', bg='#D9042B', font='Arial 10 bold', width=10,
-               foreground='white').grid(row=4, column=2)
+               foreground='white', command=url1).grid(row=4, column=2)
     # Отступы
         Label().grid(row=5, column=0)
         Label().grid(row=5, column=1)
@@ -80,7 +81,7 @@ class instrac():
         Label(dep, text='Условия:\n Ставка до 9,5% \n Сумма до 20 млн ₽ \n Доход до 143 151 ₽').grid(
             row=7, column=1)
         Button(dep, text='Оформить\n заявку', bg='#D9042B', font='Arial 10 bold', width=10,
-               foreground='white').grid(row=7, column=2)
+               foreground='white', command=url1).grid(row=7, column=2)
 
     def credit():
         cred = Toplevel()
@@ -96,7 +97,7 @@ class instrac():
         Label(cred, text='Условия:\n Ставка от 9,9% \n Сумма до 5 млн. ₽ \n Ежемесячный платеж 24 165 ₽').grid(
             row=1, column=1)
         Button(cred, text='Оформить\n заявку', bg='#D9042B', font='Arial 10 bold', width=10,
-               foreground='white').grid(row=1, column=2)
+               foreground='white', command=url2).grid(row=1, column=2)
     # Отступы
         Label().grid(row=2, column=0)
         Label().grid(row=2, column=1)
@@ -111,7 +112,7 @@ class instrac():
         Label(cred, text='Условия:\n Ставка от 9,9% \n Сумма до 5 млн ₽ \n Ежемесячный платеж 24 165 ₽').grid(
             row=4, column=1)
         Button(cred, text='Оформить\n заявку', bg='#D9042B', font='Arial 10 bold', width=10,
-               foreground='white').grid(row=4, column=2)
+               foreground='white', command=url2).grid(row=4, column=2)
     # Отступы
         Label().grid(row=5, column=0)
         Label().grid(row=5, column=1)
@@ -127,7 +128,7 @@ class instrac():
         Label(cred, text='Условия:\n Ставка от 9,9% \n Сумма до 5 млн ₽ \n Ежемесячный платеж до 24 165 ₽').grid(
             row=7, column=1)
         Button(cred, text='Оформить\n заявку', bg='#D9042B', font='Arial 10 bold', width=10,
-               foreground='white').grid(row=7, column=2)
+               foreground='white', command=url2).grid(row=7, column=2)
 
     def rasch():
         def calculate_credit():
@@ -168,13 +169,12 @@ class instrac():
             interest_rate = float(interest_rate_entry.get())
             time_period = float(time_period_entry.get())
 
-            interest = principal * (interest_rate / 100) * time_period
-            total_amount = principal + interest
+            total_amount = principal * (1 + interest_rate / 100) ** time_period
 
             monthly_payment = total_amount / time_period
 
-            messagebox.showinfo("Результаты расчета", f"Итого будет: {total_amount} рублей\n\n"
-                                f"Ежемесячные выплаты составят: {monthly_payment} рублей")
+            messagebox.showinfo("Результаты расчета", f"Итого будет: {total_amount:.2f} рублей\n\n"
+                                f"Ежегодные выплаты составят: {monthly_payment:.2f} рублей")
 
         def on_calculation_type_selected():
             selected_calculation_type = calculation_type.get()
@@ -273,8 +273,7 @@ class instrac():
         inst = Toplevel()
         inst.title('Инструкция пользователя')
         inst.iconbitmap(r'Mkb.ico')
-        Label(inst, text=f'Добрый день, пользователь!').grid(
-            row=0, columnspan=3)
+
         Label(inst, text=f'Вам доступны следующие опции:').grid(
             row=1, columnspan=3)
 
@@ -289,12 +288,20 @@ class instrac():
             row=2, column=2)
 
 
+def url1():
+    url = 'https://mkb.ru/personal/deposits'
+    requests.get(url)
+
+
+def url2():
+    url = 'https://mkb.ru/personal/credits'
+    requests.get(url)
 # Функция регистрации для новых пользователей
 
 
 def reg():
     reg = Toplevel()
-    reg.title('Online-Регистрация')
+    reg.title('Регистрация')
     reg.iconbitmap(r'Mkb.ico')
 
     Label(reg, text='Авторизация в приложении', bg='#D9042B', font='Arial 10 bold',
@@ -314,14 +321,24 @@ def reg():
 
 
 def new(enewl, enewp):  # Функция записи новых пользователей
-    raz = Toplevel()
     login = enewl.get()
     password = enewp.get()
-    Label(raz, text=f'Ваш логин {login}\n Ваш пароль {password}',
-          font='Arial 10 bold').grid(row=99, column=99)
-    with open('users.txt', 'a', encoding='utf-8') as file:
-        file.write(login + '\n')
-        file.write(password + '\n')
+    try:
+        i = 0
+        while i != 5:
+            1/(len(login)-i)
+            1/(len(password)-i)
+            i += 1
+    except:
+        messagebox.showerror(
+            'Ошибка', "Логин и пароль должны иметь длину больше 5 символов!")
+    if len(login) > 5:
+        if len(password) > 5:
+            messagebox.showinfo(
+                'Успешно!', f"Регистрация прошла успешно \n Ваш логин {login} \n Ваш пароль {password} ")
+            with open('users.txt', 'a', encoding='utf-8') as file:
+                file.write(login + '\n')
+                file.write(password + '\n')
 
 
 def old(eoldl, eoldp):  # Функция проверки входа
@@ -392,7 +409,7 @@ Label(text='Пароль', bg='#272C8C', font='Arial 10 bold', width=10,
       foreground='white').grid(row=5, column=0)
 eoldl = Entry(width=80)
 eoldl.grid(row=3, column=1, columnspan=3)
-eoldp = Entry(width=80)
+eoldp = Entry(width=80, show='*')
 eoldp.grid(row=5, column=1, columnspan=3)
 Button(text='Войти', command=lambda: old(eoldl, eoldp), bg='#D9042B', font='Arial 10 bold', width=10,
        foreground='white').grid(row=7, column=1)
